@@ -1,6 +1,4 @@
-package com.test.testspringboot.models;
-
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+package com.test.testspringboot.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

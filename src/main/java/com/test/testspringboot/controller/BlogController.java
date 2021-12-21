@@ -1,7 +1,7 @@
-package com.test.testspringboot.controllers;
+package com.test.testspringboot.controller;
 
-import com.test.testspringboot.models.Post;
-import com.test.testspringboot.repos.PostRepository;
+import com.test.testspringboot.model.Post;
+import com.test.testspringboot.repo.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +17,11 @@ import java.util.Optional;
 public class BlogController {
 
     @Autowired
-    private PostRepository postRepository;
+    private PostRepo postRepo;
 
     @GetMapping("/blog")
     private String blog(Model model) {
-        Iterable<Post> posts = postRepository.findAll();
+        Iterable<Post> posts = postRepo.findAll();
         model.addAttribute("title", "Мои статьи");
         model.addAttribute("posts", posts);
         return "blog-main";
@@ -29,7 +29,7 @@ public class BlogController {
 
     @GetMapping("/blog/tables")
     private String blogTables(Model model) {
-        Iterable<Post> posts = postRepository.findAll();
+        Iterable<Post> posts = postRepo.findAll();
         model.addAttribute("title", "Мои таблицы");
         model.addAttribute("posts", posts);
         return "blog-tables";
@@ -46,13 +46,13 @@ public class BlogController {
                                @RequestParam("anons") String anons,
                                @RequestParam("fulltext") String fulltext, Model model) {
         Post post = new Post(title, anons, fulltext);
-        postRepository.save(post);
+        postRepo.save(post);
         return "redirect:/blog";
     }
 
     @GetMapping("/blog/{id}")
     private String blogDetails(@PathVariable(value = "id") long id, Model model) {
-        Optional<Post> post = postRepository.findById(id);
+        Optional<Post> post = postRepo.findById(id);
         ArrayList<Post> res = new ArrayList<>();
         post.ifPresent(res::add);
         model.addAttribute("title", "Добавить статью");
@@ -62,11 +62,11 @@ public class BlogController {
 
     @GetMapping("/blog/{id}/edit")
     private String blogEdit(@PathVariable(value = "id") long id, Model model) {
-        if (!postRepository.existsById(id)) {
+        if (!postRepo.existsById(id)) {
             return "redirect:/blog";
         }
 
-        Optional<Post> post = postRepository.findById(id);
+        Optional<Post> post = postRepo.findById(id);
         ArrayList<Post> res = new ArrayList<>();
         post.ifPresent(res::add);
         model.addAttribute("title", "Изменить статью");
@@ -79,18 +79,18 @@ public class BlogController {
                                 @RequestParam("title") String title,
                                 @RequestParam("anons") String anons,
                                 @RequestParam("fulltext") String fulltext, Model model) {
-        Post post = postRepository.findById(id).orElseThrow();
+        Post post = postRepo.findById(id).orElseThrow();
         post.setTitle(title);
         post.setAnons(anons);
         post.setFulltext(fulltext);
-        postRepository.save(post);
+        postRepo.save(post);
         return "redirect:/blog";
     }
 
     @PostMapping("/blog/{id}/delete")
     private String blogDelete(@PathVariable(value = "id") long id, Model model) {
-        Post post = postRepository.findById(id).orElseThrow();
-        postRepository.delete(post);
+        Post post = postRepo.findById(id).orElseThrow();
+        postRepo.delete(post);
         return "redirect:/blog";
     }
 }

@@ -10,6 +10,9 @@
             <a class="me-3 py-2 text-dark text-decoration-none" href="/blog/tables">Таблицы</a>
             <a class="me-3 py-2 text-dark text-decoration-none" href="/blog/add">Добавить статью</a>
             <a class="me-3 py-2 text-dark text-decoration-none" href="/about">О нас</a>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Sign Out" class="btn btn-success"/>
+            </form>
         </nav>
     </div>
 </div>
